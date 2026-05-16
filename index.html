@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRODE Solidario · Mundial 2026</title>
+<meta name="description" content="Jugá al PRODE del Mundial 2026 y ayudá a quienes pasan frío en la calle. Meta: 500 frazadas." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink:        #0a1628;
+    --ink-deep:   #050b16;
+    --ink-soft:   #142238;
+    --frost:      #f5efe1;
+    --frost-dim:  #e8dfca;
+    --frost-mute: rgba(245, 239, 225, 0.55);
+    --ember:      #d94d2a;
+    --ember-deep: #c43d1c;
+    --ice:        #6fa3c7;
+    --gold:       #e9c46a;
+    --green:      #5fb878;
+    --line:       rgba(245, 239, 225, 0.14);
+    --line-strong:rgba(245, 239, 225, 0.28);
+    --shadow:     0 30px 80px -20px rgba(0,0,0,0.55);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ink-deep); }
+
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    color: var(--frost);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(111,163,199,0.18), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(217,77,42,0.10), transparent 60%),
+      var(--ink);
+  }
+
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: 0.06; pointer-events: none; z-index: 100; mix-blend-mode: overlay;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 28px 80px; position: relative; }
+
+  /* ===== TOPBAR ===== */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 28px; border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--frost-dim);
+  }
+  .topbar .dot {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ember); margin-right: 8px;
+    box-shadow: 0 0 12px var(--ember);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+
+  /* ===== HERO ===== */
+  .hero { padding: 80px 0 50px; position: relative; }
+  .hero .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ember); margin-bottom: 24px;
+    opacity: 0; animation: rise 0.8s 0.1s forwards;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: clamp(56px, 10vw, 140px);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    margin-bottom: 32px;
+    font-variation-settings: "opsz" 144;
+  }
+  .hero h1 .line {
+    display: block;
+    opacity: 0; transform: translateY(40px);
+    animation: rise 0.9s forwards;
+  }
+  .hero h1 .line:nth-child(1) { animation-delay: 0.2s; }
+  .hero h1 .line:nth-child(2) { animation-delay: 0.35s; color: var(--frost-dim); font-style: italic; font-weight: 600; }
+  .hero h1 .line:nth-child(3) { animation-delay: 0.5s; }
+  .hero h1 em { font-style: italic; color: var(--ember); font-weight: 600; }
+
+  .hero .lede {
+    max-width: 600px;
+    font-size: 18px;
+    color: var(--frost-dim);
+    margin-bottom: 48px;
+    opacity: 0; animation: rise 0.9s 0.7s forwards;
+  }
+
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  /* Stats */
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    padding: 32px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    opacity: 0; animation: rise 0.9s 0.9s forwards;
+  }
+  .stat .n {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800; line-height: 1; letter-spacing: -0.02em;
+  }
+  .stat .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--frost-dim); margin-top: 10px;
+  }
+  .stat:nth-child(2) .n { color: var(--ember); }
+  .stat:nth-child(3) .n { color: var(--ice); }
+
+  /* ===== HOW IT WORKS ===== */
+  .how {
+    margin-top: 90px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .how .step .num {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-weight: 900;
+    font-size: 56px; line-height: 1;
+    color: var(--ember); letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+  .how .step h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 800;
+    margin-bottom: 10px; letter-spacing: -0.01em;
+  }
+  .how .step p {
+    color: var(--frost-dim);
+    font-size: 14px;
+  }
+
+  /* ===== FORM SECTION ===== */
+  .form-section {
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .form-aside { position: sticky; top: 32px; }
+  .form-aside .num {
+    font-family: 'Fraunces', serif;
+    font-size: 96px; font-weight: 900;
+    line-height: 1; color: var(--ember);
+    letter-spacing: -0.04em; font-style: italic;
+  }
+  .form-aside h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 38px; font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.02em;
+    margin: 16px 0 20px;
+  }
+  .form-aside p {
+    color: var(--frost-dim);
+    font-size: 15px; max-width: 340px;
+  }
+  .form-aside .rule {
+    margin: 28px 0; height: 1px; width: 60px; background: var(--ember);
+  }
+  .form-aside .small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--frost-dim);
+  }
+
+  /* Form card */
+  .card {
+    background: rgba(245, 239, 225, 0.03);
+    border: 1px solid var(--line);
+    padding: 44px 40px;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute;
+    top: -1px; left: -1px; right: -1px; height: 3px;
+    background: linear-gradient(90deg, var(--ember) 0%, var(--ember) 33%, transparent 33%, transparent 100%);
+  }
+
+  /* Step indicator */
+  .steps-indicator {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 36px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--frost-mute);
+  }
+  .steps-indicator .pill {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .steps-indicator .pill.active {
+    border-color: var(--ember);
+    color: var(--ember);
+    background: rgba(217,77,42,0.08);
+  }
+  .steps-indicator .pill.done {
+    border-color: var(--line-strong);
+    color: var(--frost-dim);
+  }
+  .steps-indicator .dash { flex: 1; height: 1px; background: var(--line); }
+
+  /* Steps */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; animation: rise 0.5s forwards; }
+
+  .group { margin-bottom: 24px; }
+  .group:last-of-type { margin-bottom: 0; }
+  .group.row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--frost-dim);
+    margin-bottom: 10px;
+  }
+  label .req { color: var(--ember); }
+  label .opt { color: var(--frost-mute); text-transform: none; letter-spacing: 0; font-size: 11px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"] {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    color: var(--frost);
+    font-family: 'Manrope', sans-serif;
+    font-size: 17px;
+    padding: 10px 0 12px;
+    transition: border-color 0.2s ease;
+    outline: none;
+    border-radius: 0;
+  }
+  input::placeholder { color: rgba(245,239,225,0.3); }
+  input:focus { border-bottom-color: var(--ember); }
+
+  /* Monto: chips */
+  .montos {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin-top: 8px;
+  }
+  .monto-chip {
+    cursor: pointer; padding: 22px 20px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.2s;
+    background: rgba(245,239,225,0.02);
+  }
+  .monto-chip:hover { border-color: var(--line-strong); }
+  .monto-chip.selected {
+    border-color: var(--ember);
+    background: rgba(217,77,42,0.07);
+  }
+  .monto-chip .price {
+    font-family: 'Fraunces', serif;
+    font-size: 28px; font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .monto-chip .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--frost-dim); margin-top: 4px;
+  }
+  .monto-chip.selected .price { color: var(--ember); }
+
+  /* Datos de pago box */
+  .pago-box {
+    background: rgba(111,163,199,0.06);
+    border-left: 2px solid var(--ice);
+    padding: 24px; margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .pago-box .pago-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pago-box .pago-row:last-child { border-bottom: none; }
+  .pago-box .pago-row .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--frost-dim);
+  }
+  .pago-box .pago-row .v {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; color: var(--frost);
+    user-select: all;
+  }
+  .pago-box .pago-row .v.big {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 800;
+    color: var(--ember);
+  }
+  .copy-btn {
+    background: none; border: 1px solid var(--line);
+    color: var(--frost-dim); padding: 4px 10px; margin-left: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--ember); color: var(--ember); }
+  .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+  /* File upload */
+  .file-drop {
+    border: 2px dashed var(--line-strong);
+    border-radius: 4px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    background: rgba(245,239,225,0.02);
+  }
+  .file-drop:hover, .file-drop.dragover {
+    border-color: var(--ember);
+    background: rgba(217,77,42,0.05);
+  }
+  .file-drop .icon {
+    font-size: 32px; color: var(--ember);
+    margin-bottom: 12px;
+  }
+  .file-drop .txt {
+    font-size: 15px; color: var(--frost-dim);
+  }
+  .file-drop .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--frost-mute); margin-top: 8px;
+  }
+  .file-drop.has-file {
+    border-style: solid; border-color: var(--green);
+    background: rgba(95,184,120,0.05);
+  }
+  .file-drop.has-file .icon { color: var(--green); }
+  .file-drop .filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--frost);
+    margin-top: 6px;
+    word-break: break-all;
+  }
+
+  #fileInput { display: none; }
+
+  /* Buttons */
+  .actions {
+    display: flex; gap: 12px; margin-top: 36px;
+  }
+  .btn {
+    flex: 1;
+    border: none;
+    padding: 20px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px;
+    border-radius: 2px;
+  }
+  .btn-primary {
+    background: var(--ember); color: var(--frost);
+  }
+  .btn-primary:hover { background: var(--ember-deep); transform: translateY(-2px); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-ghost {
+    background: transparent; color: var(--frost-dim);
+    border: 1px solid var(--line);
+    flex: 0 0 auto; padding: 20px 24px;
+  }
+  .btn-ghost:hover { border-color: var(--line-strong); color: var(--frost); }
+  .btn .arrow { transition: transform 0.2s; }
+  .btn:hover .arrow { transform: translateX(4px); }
+
+  /* Mensajes */
+  .msg {
+    display: none;
+    padding: 16px 20px; margin-top: 20px;
+    border-left: 3px solid; font-size: 14px;
+    border-radius: 2px;
+  }
+  .msg.show { display: block; animation: rise 0.4s forwards; }
+  .msg.err { border-color: var(--ember); background: rgba(217,77,42,0.08); color: #f4c3b3; }
+  .msg.info{ border-color: var(--ice); background: rgba(111,163,199,0.08); color: #c5dbe9; }
+
+  /* Success */
+  .success { text-align: center; padding: 40px 20px; }
+  .success .check {
+    width: 72px; height: 72px;
+    margin: 0 auto 28px;
+    border: 2px solid var(--green); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--green); font-size: 32px;
+  }
+  .success h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 36px; font-weight: 800;
+    margin-bottom: 16px; letter-spacing: -0.02em;
+  }
+  .success p {
+    color: var(--frost-dim); max-width: 440px;
+    margin: 0 auto 24px;
+  }
+  .success .ticket {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; letter-spacing: 0.25em;
+    padding: 16px 22px;
+    border: 1px dashed var(--line-strong);
+    display: inline-block;
+    color: var(--ember);
+    margin: 8px 0 28px;
+  }
+  .success .summary {
+    text-align: left;
+    background: rgba(245,239,225,0.03);
+    border: 1px solid var(--line);
+    padding: 24px; border-radius: 4px;
+    max-width: 440px; margin: 0 auto 24px;
+    font-size: 14px;
+  }
+  .success .summary .row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px dashed var(--line);
+  }
+  .success .summary .row:last-child { border-bottom: none; }
+  .success .summary .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--frost-dim);
+  }
+  .success .summary .v { color: var(--frost); }
+
+  /* Loading overlay sobre el form */
+  .loading-mask {
+    position: absolute; inset: 0;
+    background: rgba(5,11,22,0.7);
+    backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 10; border-radius: 4px;
+  }
+  .loading-mask.show { display: flex; }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--line-strong);
+    border-top-color: var(--ember);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Footer */
+  footer {
+    margin-top: 100px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--frost-dim);
+  }
+  footer .heart { color: var(--ember); }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .how { grid-template-columns: 1fr; gap: 24px; }
+    .form-section { grid-template-columns: 1fr; gap: 40px; }
+    .form-aside { position: static; }
+    .form-aside .num { font-size: 64px; }
+    .form-aside h2 { font-size: 28px; }
+    .card { padding: 32px 24px; }
+    .group.row { grid-template-columns: 1fr; gap: 24px; }
+    .montos { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; gap: 18px; padding: 24px 0; }
+    .topbar { font-size: 10px; }
+    .topbar span:last-child { display: none; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .actions { flex-direction: column-reverse; }
+    .btn-ghost { width: 100%; }
+    .pago-box .pago-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span><span class="dot"></span>Prode Solidario · 2026</span>
+    <span>Inscripciones · hasta 10 de junio</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="kicker">Jugá · Ayudá · Abrigá</div>
+    <h1>
+      <span class="line">Mundial</span>
+      <span class="line">de</span>
+      <span class="line">invierno<em>.</em></span>
+    </h1>
+    <p class="lede">
+      Mientras se juega el Mundial 2026, miles de personas pasan frío en la calle de Buenos Aires.
+      Este PRODE es contra eso: jugás, acertás (o no), y cada jugada se transforma
+      en frazadas para quien las necesita. <strong style="color:var(--frost)">Cada inscripción = 3 frazadas más.</strong>
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="n">500</div>
+        <div class="l">Frazadas · Meta</div>
+      </div>
+      <div class="stat">
+        <div class="n">72</div>
+        <div class="l">Partidos fase de grupos</div>
+      </div>
+      <div class="stat">
+        <div class="n">3</div>
+        <div class="l">Premios para ganadores</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="step">
+      <div class="num">01</div>
+      <h3>Te inscribís</h3>
+      <p>Completás tus datos, transferís el valor de la inscripción y subís el comprobante. Te confirmamos en 24 hs.</p>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <h3>Jugás el PRODE</h3>
+      <p>Antes del primer partido vas a poder cargar tus predicciones de los 72 partidos de fase de grupos.</p>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <h3>Abrigás</h3>
+      <p>Toda la recaudación, menos los premios, va a comprar frazadas y repartirlas en CABA. Cuentas públicas al cierre.</p>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="form-section" id="formSection">
+    <aside class="form-aside">
+      <div class="num">★</div>
+      <h2>Sumate.</h2>
+      <p>Tres pasos. Cinco minutos. Una frazada menos en la calle que en tu casa.</p>
+      <div class="rule"></div>
+      <div class="small">Inscripciones · hasta el 10 de junio de 2026</div>
+    </aside>
+
+    <div class="card" id="formCard">
+      <div class="loading-mask" id="loadingMask"><div class="spinner"></div></div>
+
+      <!-- Step indicator -->
+      <div class="steps-indicator">
+        <span class="pill active" id="ind1">01 · Datos</span>
+        <span class="dash"></span>
+        <span class="pill" id="ind2">02 · Pago</span>
+        <span class="dash"></span>
+        <span class="pill" id="ind3">03 · Comprobante</span>
+      </div>
+
+      <!-- ============ STEP 1: DATOS ============ -->
+      <div class="step-panel active" id="step1">
+        <div class="group row">
+          <div>
+            <label for="nombre">Nombre <span class="req">*</span></label>
+            <input type="text" id="nombre" placeholder="Tu nombre" maxlength="40" autocomplete="given-name" />
+          </div>
+          <div>
+            <label for="apellido">Apellido <span class="req">*</span></label>
+            <input type="text" id="apellido" placeholder="Tu apellido" maxlength="40" autocomplete="family-name" />
+          </div>
+        </div>
+
+        <div class="group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="tu@email.com" autocomplete="email" />
+        </div>
+
+        <div class="group">
+          <label for="whatsapp">WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="whatsapp" placeholder="+54 9 11 ..." maxlength="30" autocomplete="tel" />
+        </div>
+
+        <div class="group">
+          <label for="dni">DNI <span class="opt">(opcional, solo si ganás)</span></label>
+          <input type="text" id="dni" placeholder="Sin puntos" maxlength="12" inputmode="numeric" />
+        </div>
+
+        <div class="group">
+          <label>Valor de inscripción <span class="req">*</span></label>
+          <div class="montos">
+            <div class="monto-chip" data-monto="20000">
+              <div class="price">$20.000</div>
+              <div class="lbl">≈ 2 frazadas</div>
+            </div>
+            <div class="monto-chip selected" data-monto="30000">
+              <div class="price">$30.000</div>
+              <div class="lbl">≈ 3 frazadas · recomendado</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg err" id="msg1"></div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="goToStep(2)">
+            <span>Continuar</span><span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ STEP 2: PAGO ============ -->
+      <div class="step-panel" id="step2">
+        <p style="color:var(--frost-dim); font-size:15px; margin-bottom:24px;">
+          Transferí el valor de tu inscripción a estos datos. En el próximo paso subís el comprobante.
+        </p>
+
+        <div class="pago-box">
+          <div class="pago-row">
+            <span class="k">Monto a transferir</span>
+            <span class="v big" id="montoDisplay">$30.000</span>
+          </div>
+          <div class="pago-row">
+            <span class="k">Alias</span>
+            <span>
+              <span class="v" id="aliasVal">prode.solidario.2026</span>
+              <button class="copy-btn" data-copy="aliasVal">Copiar</button>
+            </span>
+          </div>
+          <div class="pago-row">
+            <span class="k">CBU / CVU</span>
+            <span>
+              <span class="v" id="cbuVal">0000003100000000000000</span>
+              <button class="copy-btn" data-copy="cbuVal">Copiar</button>
+            </span>
+          </div>
+          <div class="pago-row">
+            <span class="k">Titular</span>
+            <span class="v">[NOMBRE DEL ORGANIZADOR]</span>
+          </div>
+          <div class="pago-row">
+            <span class="k">CUIT/CUIL</span>
+            <span class="v">XX-XXXXXXXX-X</span>
+          </div>
+        </div>
+
+        <div class="msg info show" style="margin-top:0">
+          Aceptamos transferencia bancaria, Mercado Pago, Ualá o cualquier billetera virtual.
+          Una vez transferido, subís el comprobante en el próximo paso.
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" onclick="goToStep(1)">← Atrás</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">
+            <span>Ya transferí</span><span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ STEP 3: COMPROBANTE ============ -->
+      <div class="step-panel" id="step3">
+        <p style="color:var(--frost-dim); font-size:15px; margin-bottom:24px;">
+          Subí una captura o PDF del comprobante de transferencia.
+        </p>
+
+        <div class="group">
+          <label>Comprobante de pago <span class="req">*</span></label>
+          <div class="file-drop" id="fileDrop">
+            <div class="icon">⬆</div>
+            <div class="txt" id="fileTxt">Tocá para elegir archivo o arrastralo acá</div>
+            <div class="hint">JPG · PNG · PDF · máx 5 MB</div>
+            <div class="filename" id="fileName"></div>
+          </div>
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,application/pdf" />
+        </div>
+
+        <div class="msg err" id="msg3"></div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" onclick="goToStep(2)">← Atrás</button>
+          <button class="btn btn-primary" id="submitBtn" onclick="submitInscripcion()">
+            <span>Confirmar inscripción</span><span class="arrow">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ SUCCESS ============ -->
+      <div class="step-panel" id="stepDone">
+        <div class="success">
+          <div class="check">✓</div>
+          <h3>Inscripción registrada</h3>
+          <p>Recibimos tus datos y tu comprobante. En las próximas 24 hs te confirmamos por WhatsApp y te enviamos el link para cargar tus predicciones.</p>
+          <div class="ticket" id="ticketDisplay">TICKET · ————</div>
+          <div class="summary" id="summary"></div>
+          <p style="font-size:13px; color:var(--frost-mute);">Guardá tu número de ticket por las dudas.<br/>Gracias por jugar y por sumar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>© 2026 · Prode Solidario</div>
+    <div>Hecho con <span class="heart">♦</span> contra el frío</div>
+  </footer>
+
+</div>
+
+<!-- ============ SUPABASE ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   CONFIG · COMPLETÁ ESTAS LÍNEAS
+   ============================================================ */
+const SUPABASE_URL = 'TU_PROJECT_URL_AQUI';        // ej: https://abcdxyz.supabase.co
+const SUPABASE_ANON_KEY = 'TU_ANON_KEY_AQUI';      // anon public key
+
+// Datos de pago — EDITALOS:
+const PAGO = {
+  alias:   'prode.solidario.2026',
+  cbu:     '0000003100000000000000',
+  titular: '[NOMBRE DEL ORGANIZADOR]',
+  cuit:    'XX-XXXXXXXX-X'
+};
+/* ============================================================ */
+
+// Pintar datos de pago (por si los editaste arriba)
+document.getElementById('aliasVal').textContent = PAGO.alias;
+document.getElementById('cbuVal').textContent   = PAGO.cbu;
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Estado del form
+const state = {
+  step: 1,
+  monto: 30000,
+  file: null,
+  data: {}
+};
+
+// === Monto chips ===
+document.querySelectorAll('.monto-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.monto-chip').forEach(c => c.classList.remove('selected'));
+    chip.classList.add('selected');
+    state.monto = parseInt(chip.dataset.monto, 10);
+    document.getElementById('montoDisplay').textContent = '$' + state.monto.toLocaleString('es-AR');
+  });
+});
+
+// === Copy buttons ===
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const txt = document.getElementById(btn.dataset.copy).textContent;
+    try {
+      await navigator.clipboard.writeText(txt);
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copiado';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+    } catch (e) { console.error(e); }
+  });
+});
+
+// === File drop ===
+const fileDrop  = document.getElementById('fileDrop');
+const fileInput = document.getElementById('fileInput');
+const fileTxt   = document.getElementById('fileTxt');
+const fileName  = document.getElementById('fileName');
+
+fileDrop.addEventListener('click', () => fileInput.click());
+fileDrop.addEventListener('dragover', (e) => { e.preventDefault(); fileDrop.classList.add('dragover'); });
+fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragover'));
+fileDrop.addEventListener('drop', (e) => {
+  e.preventDefault(); fileDrop.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+  // Validar tamaño y tipo
+  if (file.size > 5 * 1024 * 1024) {
+    return showError('msg3', 'El archivo supera 5 MB. Comprimilo o sacale una foto más liviana.');
+  }
+  const ok = ['image/jpeg','image/png','image/webp','application/pdf'].includes(file.type);
+  if (!ok) {
+    return showError('msg3', 'Formato no válido. Tiene que ser JPG, PNG, WEBP o PDF.');
+  }
+  state.file = file;
+  fileDrop.classList.add('has-file');
+  fileTxt.textContent = 'Archivo listo';
+  fileName.textContent = file.name + ' · ' + (file.size / 1024).toFixed(0) + ' KB';
+}
+
+// === Navegación entre steps ===
+function goToStep(n) {
+  // Validar step 1 antes de avanzar
+  if (state.step === 1 && n === 2) {
+    if (!validateStep1()) return;
+  }
+  state.step = n;
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  ['step1','step2','step3','stepDone'].forEach((id, i) => {
+    if (i + 1 === n || (n === 'done' && id === 'stepDone'))
+      document.getElementById(id).classList.add('active');
+  });
+  // Actualizar indicador
+  ['ind1','ind2','ind3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i + 1 < n) el.classList.add('done');
+    else if (i + 1 === n) el.classList.add('active');
+  });
+  // Scroll suave
+  document.getElementById('formSection').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function validateStep1() {
+  const nombre   = document.getElementById('nombre').value.trim();
+  const apellido = document.getElementById('apellido').value.trim();
+  const email    = document.getElementById('email').value.trim().toLowerCase();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const dni      = document.getElementById('dni').value.trim();
+
+  if (nombre.length < 2)   return showError('msg1', 'Poné tu nombre completo.');
+  if (apellido.length < 2) return showError('msg1', 'Poné tu apellido.');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+                           return showError('msg1', 'El email no parece válido.');
+  if (whatsapp.replace(/\D/g,'').length < 8)
+                           return showError('msg1', 'Necesitamos un WhatsApp válido para confirmarte.');
+
+  state.data = { nombre, apellido, email, whatsapp, dni: dni || null, monto: state.monto };
+  hideError('msg1');
+  return true;
+}
+
+function showError(id, txt) {
+  const el = document.getElementById(id);
+  el.textContent = txt; el.classList.add('show');
+  return false;
+}
+function hideError(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// === Submit final ===
+async function submitInscripcion() {
+  hideError('msg3');
+  if (!state.file) {
+    return showError('msg3', 'Subí el comprobante antes de confirmar.');
+  }
+
+  document.getElementById('loadingMask').classList.add('show');
+
+  try {
+    // 1. Subir archivo a Storage
+    const ext = state.file.name.split('.').pop().toLowerCase();
+    const safeName = state.data.email.replace(/[^a-z0-9]/g,'_');
+    const filePath = `pagos/${Date.now()}_${safeName}.${ext}`;
+
+    const { error: upErr } = await supabase
+      .storage.from('comprobantes')
+      .upload(filePath, state.file, {
+        cacheControl: '3600',
+        contentType: state.file.type
+      });
+
+    if (upErr) {
+      console.error(upErr);
+      throw new Error('No pudimos subir el comprobante. Probá de nuevo.');
+    }
+
+    // 2. Insertar inscripción
+    const insertData = {
+      ...state.data,
+      comprobante_url: filePath,
+      estado: 'pendiente'
+    };
+
+    const { data: inserted, error: insErr } = await supabase
+      .from('inscripciones')
+      .insert([insertData])
+      .select('ticket')
+      .single();
+
+    if (insErr) {
+      console.error(insErr);
+      if (insErr.code === '23505') {
+        throw new Error('Ya hay una inscripción con ese email. Si necesitás ayuda escribinos.');
+      }
+      throw new Error('Algo falló al guardar la inscripción. Probá en un minuto.');
+    }
+
+    // 3. Mostrar success
+    document.getElementById('ticketDisplay').textContent = 'TICKET · ' + inserted.ticket;
+    document.getElementById('summary').innerHTML = `
+      <div class="row"><span class="k">Nombre</span><span class="v">${state.data.nombre} ${state.data.apellido}</span></div>
+      <div class="row"><span class="k">Email</span><span class="v">${state.data.email}</span></div>
+      <div class="row"><span class="k">Monto</span><span class="v">$${state.data.monto.toLocaleString('es-AR')}</span></div>
+      <div class="row"><span class="k">Estado</span><span class="v" style="color:var(--gold)">Pendiente de verificación</span></div>
+    `;
+    goToStep('done');
+  } catch (err) {
+    showError('msg3', err.message || 'Algo salió mal. Probá de nuevo.');
+  } finally {
+    document.getElementById('loadingMask').classList.remove('show');
+  }
+}
+</script>
+
+</body>
+</html>
